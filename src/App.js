@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import Navbar from "./Components/Navbar";
+import Content from "./Components/content";
+import Header from "./Components/header";
+import Photo from "./Components/photo";
+import axios from "axios";
 
 function App() {
+  const [isLoading, setIsLoaading] = useState(true)
+  const [data , setData] = useState([])
+  useEffect(()=>{
+    const getData = async () =>{
+      const response = await axios.get("https://ybiapi.fresh-app.com/api/demo_profile")
+      setData(response.data)
+    }
+    getData()
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header image={data.images_list[0]} />
+      <Content data={data}/>
+      <Photo images={data.images_list}/>
+      <Navbar />
     </div>
   );
 }
